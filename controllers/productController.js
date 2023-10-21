@@ -19,37 +19,95 @@ const getProducts = asyncHandler(async (req, res) => {
 // @desc    Fetch a single product
 // @route   GET /api/products/:id
 // @acess   Public
-const getProductById = asyncHandler(async (req,res) => {
-    const product = await Product.findById(req.params.id)
+// const getProductById = asyncHandler(async (req,res) => {
+//     const product = await Product.findById(req.params.id)
 
+//     if (!product) {
+//       return res.status(404).json({ message: 'Product not found' });
+//     }
+  
+//     if (!product.sellers || product.sellers.length === 0) {
+//       return res.json({ message: 'No sellers found for this product' });
+//     }
+   
+
+//     const sellers = [];
+//     for (const sellerItem of product.sellers) {
+//       const foundSeller = await Seller.findOne({ sellerId: sellerItem.sellerId });
+//       if (foundSeller) {
+//         sellers.push({
+//           sellerId: foundSeller.sellerId,
+//           name: foundSeller.name,
+//           email: foundSeller.email,
+//           carbonRating: foundSeller.carbonRating,
+//           about: foundSeller.about
+//         });
+//       }
+//     }
+
+//     res.json({product, sellers: sellers})
+
+    
+
+// })
+
+// const getProductById = asyncHandler(async (req, res) => {
+  // const { id } = req.params; 
+
+  // try {
+  //   const product = await Product.findById(id).populate({
+  //     path: 'sellers',
+  //     populate: {
+  //       path: 'seller',
+  //       select: 'name email carbonRating about'
+  //     }
+  //   });
+  
+  //   if (!product) {
+  //     return res.status(404).json({ message: 'Product not found' });
+  //   }
+    
+  //   if (!product.sellers || product.sellers.length === 0) {
+  //     return res.json({ message: 'No sellers found for this product' }); 
+  //   }
+  // f
+  //   res.json(product);
+  // } catch (error) {
+  //   res.status(500).json({ message: 'Server Error' });
+  // }
+  const getProductById = asyncHandler(async (req, res) => {
+    const product = await Product.findById(req.params.id);
+  
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
     }
   
-    if (!product.sellers || product.sellers.length === 0) {
-      return res.json({ message: 'No sellers found for this product' });
+    const populatedProduct = await populateProductSellers(product);
+  
+    res.json(populatedProduct);
+  });
+  
+  const populateProductSellers = async product => {
+    const populatedProduct = JSON.parse(JSON.stringify(product));
+  
+    if (!populatedProduct.sellers || populatedProduct.sellers.length === 0) {
+      populatedProduct.sellers = [];
+      return populatedProduct;
     }
-   
-
-    const sellers = [];
-    for (const sellerItem of product.sellers) {
-      const foundSeller = await Seller.findOne({ sellerId: sellerItem.sellerId });
+  
+    for (let i = 0; i < populatedProduct.sellers.length; i++) {
+      const foundSeller = await Seller.findOne({ sellerId: populatedProduct.sellers[i].sellerId });
       if (foundSeller) {
-        sellers.push({
-          sellerId: foundSeller.sellerId,
-          name: foundSeller.name,
-          email: foundSeller.email,
-          carbonRating: foundSeller.carbonRating,
-          about: foundSeller.about
-        });
+        populatedProduct.sellers[i].name = foundSeller.name;
+        populatedProduct.sellers[i].email = foundSeller.email;
+        populatedProduct.sellers[i].rating = foundSeller.rating;
+        populatedProduct.sellers[i].carbonRating = foundSeller.carbonRating;
       }
     }
-
-    res.json({product, sellers: sellers})
-
-    
-
-})
+  
+    return populatedProduct;
+  };
+  
 
 // @desc    Delete a product
 // @route   DELETE /api/products/:id
@@ -245,7 +303,7 @@ const getProductSellers = asyncHandler(async (req, res) => {
   
     const sellers = [];
     for (const sellerItem of product.sellers) {
-      const foundSeller = await Seller.findOne({ sellerId: sellerItem.sellerId });
+      const foundSeller = await Seller.findOne({sellerId: sellerItem.sellerId });
       if (foundSeller) {
         sellers.push({
           sellerId: foundSeller.sellerId,

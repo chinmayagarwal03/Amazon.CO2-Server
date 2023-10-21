@@ -64,7 +64,8 @@ const productSchema = mongoose.Schema(
     sellers: [
       {
         sellerId: {
-          type: Number,
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Seller',
           required: true,
         },
         price: {type: Number, required: true},
