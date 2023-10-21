@@ -22,34 +22,34 @@ const getProducts = asyncHandler(async (req, res) => {
 const getProductById = asyncHandler(async (req,res) => {
     const product = await Product.findById(req.params.id)
 
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+  
+    if (!product.sellers || product.sellers.length === 0) {
+      return res.json({ message: 'No sellers found for this product' });
+    }
    
-      if (!product) {
-        return res.status(404).json({ message: 'Product not found' });
-      }
-      
-    
-      if (!product.sellers || product.sellers.length === 0) {
-        return res.json({ message: 'No sellers found for this product' }); 
-      }
-    
-      const sellers = [];
-      for (const sellerItem of product.sellers) {
-        const foundSeller = await Seller.findOne({ sellerId: sellerItem.sellerId });
-        if (foundSeller) {
-          sellers.push({
-            sellerId: foundSeller.sellerId,
-            name: foundSeller.name,
-            email: foundSeller.email,
-            carbonRating: foundSeller.carbonRating,
-            rating : foundSeller.rating,
-            about: foundSeller.about
-          });
-        }
-      }
-    
-      res.json(sellers);
-    });
 
+    const sellers = [];
+    for (const sellerItem of product.sellers) {
+      const foundSeller = await Seller.findOne({ sellerId: sellerItem.sellerId });
+      if (foundSeller) {
+        sellers.push({
+          sellerId: foundSeller.sellerId,
+          name: foundSeller.name,
+          email: foundSeller.email,
+          carbonRating: foundSeller.carbonRating,
+          about: foundSeller.about
+        });
+      }
+    }
+
+    res.json({product, sellers: sellers})
+
+    
+
+})
 
 // @desc    Delete a product
 // @route   DELETE /api/products/:id
@@ -228,7 +228,7 @@ const buyCouponWithPoints = asyncHandler(async (req, res) => {
 //     }
 //   });
 const getProductSellers = asyncHandler(async (req, res) => {
-    const { id } = req.params; 
+  const { id } = req.params; 
 
   console.log(id);
   
@@ -258,7 +258,7 @@ const getProductSellers = asyncHandler(async (req, res) => {
     }
   
     res.json(sellers);
-  });
+});
   
   
   
