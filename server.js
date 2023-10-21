@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 
 import cors from 'cors';
 const corsOptions = {
-    origin: 'http://localhost:8000',
+    origin: '*',
     credentials: true,
     optionSuccessStatus: 200
 }
