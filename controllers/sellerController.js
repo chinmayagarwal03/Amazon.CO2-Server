@@ -8,14 +8,15 @@ import Seller from '../models/sellerModel.js';
 // @route   POST /api/sellers
 // @access  Private/Admin (Modify the access level as needed)
 const createSeller = asyncHandler(async (req, res) => {
-    const { sellerId, name, email, carbonRating , about} = req.body;
+    const { sellerId, name, email, carbonRating , about, rating} = req.body;
 
     const seller = new Seller({
         sellerId,
         name,
         email,
         carbonRating,
-        about
+        about,
+        rating
     });
 
     const createdSeller = await seller.save();

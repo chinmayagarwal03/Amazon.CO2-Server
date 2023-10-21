@@ -17,6 +17,7 @@ const sellerSchema = mongoose.Schema(
         unique: true,
     },
     carbonRating: {type: Number, required: true},
+    rating: {type: Number, required: true},
     about: {type: String, required: false}
   }
 )
