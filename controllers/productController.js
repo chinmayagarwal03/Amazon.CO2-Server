@@ -6,21 +6,15 @@ import Seller from '../models/sellerModel.js'
 // @desc    Fetch all products
 // @route   GET /api/products
 // @acess   Public
-const getProducts = asyncHandler(async (req,res) => {
-    const pageSize = 2;
-    const page = Number(req.query.pageNumber) || 1  
-    const keyword = req.query.keyword ? {
-        name: {
-            $regex: req.query.keyword,
-            $options: 'i'
-        }
-    } : {
+const getProducts = asyncHandler(async (req, res) => {
+  const products = await Product.find({}); // Fetch all products
 
-    }
-    const count = await Product.countDocuments({...keyword})
-    const products = await Product.find({...keyword}).limit(pageSize).skip(pageSize * (page-1))
-    res.json({products, page, pages: Math.ceil(count / pageSize)})
-})
+  if (products) {
+    res.json(products); // Return all products
+  } else {
+    res.status(404).json({ message: 'No products found' });
+  }
+});
 
 // @desc    Fetch a single product
 // @route   GET /api/products/:id
