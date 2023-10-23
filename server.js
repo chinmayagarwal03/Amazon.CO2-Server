@@ -21,6 +21,7 @@ import userRoutes from './routes/userRoutes.js';
 import productRoutes from './routes/productRoutes.js'
 import sellerRoutes from './routes/sellerRoutes.js'
 import carbonMarketRoutes from './routes/carbonMarketRoutes.js';
+import coupons from './routes/couponsRoutes.js'
 
 
 const app = express();
@@ -34,7 +35,7 @@ app.use('/v1/user', userRoutes);
 app.use('/v1/product', productRoutes);
 app.use('/v1/seller', sellerRoutes);
 app.use('/v1/carbonMarkets', carbonMarketRoutes);
-
+app.use('/v1/coupons', coupons);
 
 app.use(notFoundMiddleware)
 
