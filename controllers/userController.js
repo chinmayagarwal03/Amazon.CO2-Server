@@ -1,28 +1,28 @@
 import asyncHandler from 'express-async-handler'
 import User from '../models/userModel.js'
-// import generateToken from '../utils/generateToken.js'
+import generateToken from '../utils/generateToken.js'
 
 // @desc    Auth user and get token
 // @route   POST /api/users/login
 // @acess   Public
-// const authUser = asyncHandler(async (req,res) => {
-//     const {email, password} = req.body
+const authUser = asyncHandler(async (req,res) => {
+    const {email, password} = req.body
 
-//     const user = await User.findOne({email: email})
+    const user = await User.findOne({email: email})
 
-//     if(user && (await user.matchPassword(password))){
-//         res.json({
-//             _id: user._id,
-//             name: user.email,
-//             email: user.email,
-//             isAdmin: user.isAdmin,
-//             token: generateToken(user._id)
-//         })
-//     }else{
-//         res.status(401)
-//         throw new Error('Invalid email address or password')
-//     }
-// })
+    if(user && (await user.matchPassword(password))){
+        res.json({
+            _id: user._id,
+            name: user.email,
+            email: user.email,
+            isAdmin: user.isAdmin,
+            token: generateToken(user._id)
+        })
+    }else{
+        res.status(401)
+        throw new Error('Invalid email address or password')
+    }
+})
 
 // // @desc    Register anew user
 // // @route   POST /api/users
@@ -159,4 +159,4 @@ const deleteUser = asyncHandler(async (req,res) => {
     }
     res.json(user)
 })
-export { registerUser, getUserProfile, updateUserProfile, getUsers, deleteUser, getUserById, updateUser}
+export { authUser, registerUser, getUserProfile, updateUserProfile, getUsers, deleteUser, getUserById, updateUser}

@@ -27,26 +27,7 @@ const getProducts = asyncHandler(async (req, res) => {
   
     res.json(product);
   });
-  const populateProductSellers = async product => {
-    const populatedProduct = JSON.parse(JSON.stringify(product));
-  
-    if (!populatedProduct.sellers || populatedProduct.sellers.length === 0) {
-      populatedProduct.sellers = [];
-      return populatedProduct;
-    }
-  
-    for (let i = 0; i < populatedProduct.sellers.length; i++) {
-      const foundSeller = await Seller.findOne({ sellerId: populatedProduct.sellers[i].sellerId });
-      if (foundSeller) {
-        populatedProduct.sellers[i].name = foundSeller.name;
-        populatedProduct.sellers[i].email = foundSeller.email;
-        populatedProduct.sellers[i].rating = foundSeller.rating;
-        populatedProduct.sellers[i].carbonRating = foundSeller.carbonRating;
-      }
-  }
-
-  return populatedProduct;
-};
+ 
   
 // @desc    Delete a product
 // @route   DELETE /api/products/:id

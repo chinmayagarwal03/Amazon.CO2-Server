@@ -8,10 +8,9 @@ import Seller from '../models/sellerModel.js';
 // @route   POST /api/sellers
 // @access  Private/Admin (Modify the access level as needed)
 const createSeller = asyncHandler(async (req, res) => {
-    const { sellerNo, name, email, carbonRating , about, rating} = req.body;
+    const { name, email, carbonRating , about, rating} = req.body;
 
     const seller = new Seller({
-        sellerNo,
         name,
         email,
         carbonRating,
@@ -30,5 +29,10 @@ const getAllSellers = asyncHandler(async (req, res) => {
     const sellerNames = sellers.map(seller => seller.name);
     res.json( sellerNames);
 });
+
+
+
+
+
 // Add the route to the router
 export {createSeller, getAllSellers}
