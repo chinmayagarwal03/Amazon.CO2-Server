@@ -126,25 +126,51 @@ const getUserById = asyncHandler(async (req,res) => {
 // @desc    Update user
 // @route   PUT /api/users/:id
 // @acess   Private/Admin
-const updateUser = asyncHandler(async (req,res) => {
-    const user = await User.findById(req.params.id)
 
-    if(user ){
-        user.name = req.body.name || user.name
-        user.email = req.body.email || user.email
-        const updatedUser = await user.save()
-
-        res.json({
-            _id: updatedUser._id,
-            name: updatedUser.name,
-            email: updatedUser.email,
-        })
-    }else{
-        res.status(404)
-        throw new Error('User not found')
+const updateUser = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const { carbonPoints, coupons } = req.body;
+  
+    const user = await User.findById(id);
+  
+    if (user) {
+      if (carbonPoints) {
+        user.carbonPoints = carbonPoints;
+      }
+      if (coupons) {
+        user.coupons.push(coupons);
+      }
+  
+      const updatedUser = await user.save();
+  
+      res.json({
+        _id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        isAdmin: updatedUser.isAdmin,
+        carbonPoints: updatedUser.carbonPoints,
+        coupons: updatedUser.coupons,
+      });
+    } else {
+      res.status(404);
+      throw new Error('User not found');
     }
-})
+  });
 
+
+  const getUserCoupons = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+  
+    const user = await User.findById(id).populate('coupons');
+  
+    if (!user) {
+      res.status(404);
+      throw new Error('User not found');
+    }
+  
+    const coupons = user.coupons;
+    res.json(coupons);
+  });
 // @desc    Delete user
 // @route   DELETE /api/users/:id
 // @acess   Private/Admin
@@ -159,4 +185,4 @@ const deleteUser = asyncHandler(async (req,res) => {
     }
     res.json(user)
 })
-export { authUser, registerUser, getUserProfile, updateUserProfile, getUsers, deleteUser, getUserById, updateUser}
+export { authUser, registerUser, getUserProfile, updateUserProfile, getUsers, deleteUser, getUserById, updateUser, getUserCoupons}

@@ -133,9 +133,11 @@ const createProductReview = asyncHandler(async (req,res) => {
 // productController.js
 
 const createCoupon = asyncHandler(async (req, res) => {
-    const { name, pointsRequired, discount } = req.body;
+    const { title, image, name, pointsRequired, discount } = req.body;
   
     const coupon = await Coupon.create({
+      title,
+      image,
       name,
       pointsRequired,
       discount,
@@ -144,6 +146,8 @@ const createCoupon = asyncHandler(async (req, res) => {
     if (coupon) {
       res.status(201).json({
         _id: coupon._id,
+        title: coupon.title,
+        image: coupon.image,
         name: coupon.name,
         pointsRequired: coupon.pointsRequired,
         discount: coupon.discount,

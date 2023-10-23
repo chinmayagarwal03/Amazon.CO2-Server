@@ -4,6 +4,12 @@ import mongoose from 'mongoose';
 
 const couponSchema = mongoose.Schema(
   {
+    title: {
+      type: String,
+    },
+    image: {
+      type: String,
+    },
     name: {
       type: String,
       required: true,
