@@ -16,77 +16,17 @@ const getProducts = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc    Fetch a single product
-// @route   GET /api/products/:id
-// @acess   Public
-// const getProductById = asyncHandler(async (req,res) => {
-//     const product = await Product.findById(req.params.id)
-
-//     if (!product) {
-//       return res.status(404).json({ message: 'Product not found' });
-//     }
   
-//     if (!product.sellers || product.sellers.length === 0) {
-//       return res.json({ message: 'No sellers found for this product' });
-//     }
-   
-
-//     const sellers = [];
-//     for (const sellerItem of product.sellers) {
-//       const foundSeller = await Seller.findOne({ sellerId: sellerItem.sellerId });
-//       if (foundSeller) {
-//         sellers.push({
-//           sellerId: foundSeller.sellerId,
-//           name: foundSeller.name,
-//           email: foundSeller.email,
-//           carbonRating: foundSeller.carbonRating,
-//           about: foundSeller.about
-//         });
-//       }
-//     }
-
-//     res.json({product, sellers: sellers})
-
-    
-
-// })
-
-// const getProductById = asyncHandler(async (req, res) => {
-  // const { id } = req.params; 
-
-  // try {
-  //   const product = await Product.findById(id).populate({
-  //     path: 'sellers',
-  //     populate: {
-  //       path: 'seller',
-  //       select: 'name email carbonRating about'
-  //     }
-  //   });
-  
-  //   if (!product) {
-  //     return res.status(404).json({ message: 'Product not found' });
-  //   }
-    
-  //   if (!product.sellers || product.sellers.length === 0) {
-  //     return res.json({ message: 'No sellers found for this product' }); 
-  //   }
-  // f
-  //   res.json(product);
-  // } catch (error) {
-  //   res.status(500).json({ message: 'Server Error' });
-  // }
   const getProductById = asyncHandler(async (req, res) => {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(req.params.id).populate('sellers.sellerId').exec();
   
     if (!product) {
-      return res.status(404).json({ message: 'Product not found' });
+      res.status(404);
+      throw new Error('Product not found');
     }
   
-    const populatedProduct = await populateProductSellers(product);
-  
-    res.json(populatedProduct);
+    res.json(product);
   });
-  
   const populateProductSellers = async product => {
     const populatedProduct = JSON.parse(JSON.stringify(product));
   
@@ -103,12 +43,11 @@ const getProducts = asyncHandler(async (req, res) => {
         populatedProduct.sellers[i].rating = foundSeller.rating;
         populatedProduct.sellers[i].carbonRating = foundSeller.carbonRating;
       }
-    }
-  
-    return populatedProduct;
-  };
-  
+  }
 
+  return populatedProduct;
+};
+  
 // @desc    Delete a product
 // @route   DELETE /api/products/:id
 // @acess   Private/Admin

@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose, { Schema } from 'mongoose'
 
 const reviewSchema = mongoose.Schema(
   {
@@ -60,18 +60,28 @@ const productSchema = mongoose.Schema(
       required: false,
       default: 0,
     },
-
     sellers: [
       {
         sellerId: {
-          type: mongoose.Schema.Types.ObjectId,
+          type: Schema.ObjectId,
           ref: 'Seller',
+          required: true
+        },
+        price: {
+          type: Number,
           required: true,
         },
-        price: {type: Number, required: true},
-        mrp : {type: Number, required: true},
-        carbon_points: {type: Number, required: true},
-    }],
+        mrp: {
+          type: Number, 
+          required: true,
+        },
+        carbon_points: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
+    
 
     countInStock: {
       type: Number,

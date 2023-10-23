@@ -28,8 +28,8 @@ app.use(cors(corsOptions));
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(morgan('dev'));
 
-app.use('/v1/user', userRoutes);
-app.use('/v1/order', orderRoutes);
+// app.use('/v1/user', userRoutes);
+// app.use('/v1/order', orderRoutes);
 app.use('/v1/product', productRoutes);
 app.use('/v1/seller', sellerRoutes);
 
