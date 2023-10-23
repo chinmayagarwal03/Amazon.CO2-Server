@@ -20,6 +20,7 @@ import orderRoutes from './routes/orderRoutes.js'
 import userRoutes from './routes/userRoutes.js';
 import productRoutes from './routes/productRoutes.js'
 import sellerRoutes from './routes/sellerRoutes.js'
+import carbonMarketRoutes from './routes/carbonMarketRoutes.js';
 
 
 const app = express();
@@ -32,6 +33,8 @@ app.use('/v1/user', userRoutes);
 // app.use('/v1/order', orderRoutes);
 app.use('/v1/product', productRoutes);
 app.use('/v1/seller', sellerRoutes);
+app.use('/v1/carbonMarkets', carbonMarketRoutes);
+
 
 app.use(notFoundMiddleware)
 
