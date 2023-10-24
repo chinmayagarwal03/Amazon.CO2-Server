@@ -159,6 +159,7 @@ const updateUser = asyncHandler(async (req, res) => {
         email: updatedUser.email,
         isAdmin: updatedUser.isAdmin,
         carbonPoints: updatedUser.carbonPoints,
+        carbon_credits: updatedUser.carbon_credits,
         coupons: updatedUser.coupons,
       });
     } else {
