@@ -12,9 +12,9 @@ const corsOptions = {
 
 dotenv.config()
 
-import bodyParser from 'body-parser';   // use as a body for post requests
-import morgan from 'morgan';  // logs the request along with some other information
-import notFoundMiddleware from './middleware/not-found.js';
+import bodyParser from 'body-parser';  
+import morgan from 'morgan';  
+import {notFound, errorHandler, routeNodeFound} from './middleware/errorMiddleware.js';
 
 import orderRoutes from './routes/orderRoutes.js'
 import userRoutes from './routes/userRoutes.js';
@@ -37,7 +37,9 @@ app.use('/v1/seller', sellerRoutes);
 app.use('/v1/carbonMarkets', carbonMarketRoutes);
 app.use('/v1/coupons', coupons);
 
-app.use(notFoundMiddleware)
+app.use(notFound)
+app.use(errorHandler)
+app.use(routeNodeFound)
 
 // Cross Origin middleware
 app.use((req, res, next) => {

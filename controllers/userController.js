@@ -78,7 +78,6 @@ const getUserProfile = asyncHandler(async (req,res) => {
             carbon_credits: user.carbon_credits,
             coupons: user.coupons,
             isAdmin: user.isAdmin,
-
         })
     }else{
         res.status(404)
@@ -133,9 +132,9 @@ const getUserById = asyncHandler(async (req,res) => {
 // @desc    Update user
 // @route   PUT /api/users/:id
 // @acess   Private/Admin
-
-const updateUser = asyncHandler(async (req, res) => {
-    const { id } = req.params;
+const updateUser = asyncHandler(async (req, res, next) => {
+    try {
+        const { id } = req.params;
     const { carbonPoints, coupons, carbon_credits } = req.body;
   
     const user = await User.findById(id);
@@ -169,14 +168,21 @@ const updateUser = asyncHandler(async (req, res) => {
       res.status(404);
       throw new Error('User not found');
     }
+    }catch {
+        next(error);
+    }
+    
   });
 
 
+// @desc    User's Coupons
+// @route   POST /api/users/login
+// @acess   Public
   const getUserCoupons = asyncHandler(async (req, res) => {
     const { id } = req.params;
   
-    const user = await User.findById(id).populate('coupons');
-  
+    const user = await User.findById(id).populate('coupons').exec();
+    console.log(user)
     if (!user) {
       res.status(404);
       throw new Error('User not found');
@@ -185,6 +191,8 @@ const updateUser = asyncHandler(async (req, res) => {
     const coupons = user.coupons;
     res.json(coupons);
   });
+
+
 // @desc    Delete user
 // @route   DELETE /api/users/:id
 // @acess   Private/Admin
