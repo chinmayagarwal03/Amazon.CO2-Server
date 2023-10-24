@@ -26,4 +26,8 @@ const addCarbonMarket = asyncHandler(async (req, res) => {
 });
 
 
-export {addCarbonMarket}
+const getAllCarbonMarkets = asyncHandler(async (req, res) => {
+  const carbonMarkets = await CarbonMarket.find({});
+  res.json(carbonMarkets);
+});
+export {addCarbonMarket, getAllCarbonMarkets}
