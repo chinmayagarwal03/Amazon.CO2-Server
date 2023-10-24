@@ -42,38 +42,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
   }
 });
 
-// const addOrderItems = asyncHandler(async (req, res) => {
-//     const {
-//       orderItems, 
-//       shippingAddress,
-//       paymentMethod,
-//       itemsPrice,
-//       taxPrice,
-//       shippingPrice,
-//       totalPrice,
-//     } = req.body
-  
-//     if (orderItems && orderItems.length === 0) {
-//       res.status(400)
-//       throw new Error('No order items')
-//       return
-//     } else {
-//       const order = new Order({
-//         orderItems,
-//         user: req.user._id,
-//         shippingAddress,
-//         paymentMethod,
-//         itemsPrice,
-//         taxPrice,
-//         shippingPrice,
-//         totalPrice,
-//       })
-  
-//       const createdOrder = await order.save()
-  
-//       res.status(201).json(createdOrder)
-//     }
-//   })
+
 
 // @desc    Get order by id
 // @route   GET /api/orders/:id
@@ -91,45 +60,7 @@ const getOrderById = asyncHandler(async (req, res) => {
 
 
 
-// @desc    Update order to paid
-// @route   PUT /api/orders/:id/pay
-// @access  Private
-// const updateOrderToPaid = asyncHandler(async (req, res) => {
-//     const order = await Order.findById(req.params.id).populate('user', 'carbonPoints');
-  
-//     if (order) {
-//       order.isPaid = true;
-//       order.paidAt = Date.now();
-//       order.paymentResult = {
-//         id: req.body.id,
-//         status: req.body.status,
-//         update_time: req.body.update_time,
-//         email_address: req.body.payer.email_address,
-//       };
-  
-//       // Calculating total points from order items
-//       let totalPoints = 0;
-//       for (let i = 0; i < order.orderItems.length; i++) {
-//         const product = order.orderItems[i];
-//         if (product.carbonPoints) {
-//           totalPoints += product.carbonPoints;
-//         }
-//       }
-  
-//       if (totalPoints > 0) {
-//         order.user.carbonPoints += totalPoints;
-//         await order.user.save();
-//       }
-  
-//       const updatedOrder = await order.save();
-  
-//       res.json(updatedOrder);
-//     } else {
-//       res.status(404);
-//       throw new Error('Order not found');
-//     }
-//   });
-  
+
   // @desc    Update order to paid
 // @route   PUT /api/orders/:id/pay
 // @access  Private
@@ -198,11 +129,6 @@ const getMyOrders = asyncHandler(async (req, res) => {
   res.json(orders);
 });
 
-// const getMyOrders = asyncHandler(async (req, res) => {
-//   const orders = await Order.find({user: req.user._id})
-
-//   res.json(orders)
-// })
 
 // @desc    Get all orders
 // @route   PUT /api/orders
