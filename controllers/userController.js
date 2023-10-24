@@ -3,7 +3,7 @@ import User from '../models/userModel.js'
 import generateToken from '../utils/generateToken.js'
 
 // @desc    Auth user and get token
-// @route   POST /api/users/login
+// @route   POST /api/user/login
 // @acess   Public
 const authUser = asyncHandler(async (req,res) => {
     const {email, password} = req.body
@@ -27,9 +27,9 @@ const authUser = asyncHandler(async (req,res) => {
     }
 })
 
-// // @desc    Register anew user
-// // @route   POST /api/users
-// // @acess   Public
+// // @desc    Register a new user
+// // @route   POST /api/user
+// // @acess   Private
 const registerUser = asyncHandler(async (req,res) => {
     const {name, email, password} = req.body
 
@@ -54,7 +54,6 @@ const registerUser = asyncHandler(async (req,res) => {
             name: user.name,
             email: user.email,
             isAdmin: user.isAdmin,
-            // token: generateToken(user.id),
         })
     }else{
         res.status(400)
@@ -63,7 +62,7 @@ const registerUser = asyncHandler(async (req,res) => {
 })
 
 // @desc    get user profile
-// @route   GET /api/users/profile
+// @route   GET /api/user/profile
 // @acess   Private
 const getUserProfile = asyncHandler(async (req,res) => {
 
@@ -86,7 +85,7 @@ const getUserProfile = asyncHandler(async (req,res) => {
 })
 
 // @desc    Update user profile
-// @route   PUT /api/users/profile
+// @route   PATCH /api/user/profile
 // @acess   Private
 const updateUserProfile = asyncHandler(async (req,res) => {
     const user = await User.findById(req.user._id)
@@ -114,15 +113,15 @@ const updateUserProfile = asyncHandler(async (req,res) => {
 })
 
 // @desc    get all users
-// @route   GET /api/users
-// @acess   Private/Admin
+// @route   GET /api/user
+// @acess   Private
 const getUsers = asyncHandler(async (req,res) => {
     const users = await User.find({})
     res.json(users)
 })
 
 // @desc    get user by id
-// @route   GET /api/users/:id
+// @route   GET /api/user/:id
 // @acess   Private/Admin
 const getUserById = asyncHandler(async (req,res) => {
     const user = await User.findById(req.params.id).select('-password')
@@ -130,7 +129,7 @@ const getUserById = asyncHandler(async (req,res) => {
 })
 
 // @desc    Update user
-// @route   PUT /api/users/:id
+// @route   PUT /api/user/:id
 // @acess   Private/Admin
 const updateUser = asyncHandler(async (req, res, next) => {
     try {
@@ -176,7 +175,7 @@ const updateUser = asyncHandler(async (req, res, next) => {
 
 
 // @desc    User's Coupons
-// @route   POST /api/users/login
+// @route   GET /api/user/coupons/:id
 // @acess   Public
   const getUserCoupons = asyncHandler(async (req, res) => {
     const { id } = req.params;
@@ -195,7 +194,7 @@ const updateUser = asyncHandler(async (req, res, next) => {
 
 // @desc    Delete user
 // @route   DELETE /api/users/:id
-// @acess   Private/Admin
+// @acess   Private
 const deleteUser = asyncHandler(async (req,res) => {
     const user = await User.findById(req.params.id)
 

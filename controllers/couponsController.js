@@ -1,10 +1,10 @@
 import asyncHandler from 'express-async-handler'
 import Coupon from '../models/couponModel.js'
+import User from '../models/userModel.js'
 
-// @desc    Create new order
-// @route   POST /api/orders
+// @desc    Create new coupon
+// @route   POST /api/coupons
 // @access  Private
-
 const createCoupon = asyncHandler(async (req, res) => {
     const { title, image, name, pointsRequired, discount } = req.body;
   
@@ -31,22 +31,21 @@ const createCoupon = asyncHandler(async (req, res) => {
     }
   });
 
-  const getCoupons = asyncHandler(async (req, res) => {
+// @desc    Get all coupons
+// @route   Get /api/coupons
+// @access  Public
+const getCoupons = asyncHandler(async (req, res) => {
     const coupons = await Coupon.find({});
     res.json(coupons);
-  });
-  
-  // Existing functions
-  
+});  
   
 // @desc    Buy coupon with carbon points
 // @route   POST /api/coupons/buy
 // @access  Private
 const buyCouponWithPoints = asyncHandler(async (req, res) => {
-  const { couponId } = req.body; // Assuming you receive the coupon ID in the request body
-  const user = await User.findById(req.user._id); // Assuming the authenticated user's ID is used
+  const { couponId } = req.body; 
+  const user = await User.findById(req.user._id); 
 
-  // Find the coupon by ID
   const coupon = await Coupon.findById(couponId);
 
   if (!coupon) {
@@ -54,19 +53,15 @@ const buyCouponWithPoints = asyncHandler(async (req, res) => {
     throw new Error('Coupon not found');
   }
 
-  // Check if the user has enough carbon points to buy the coupon
   if (user.carbonPoints < coupon.pointsRequired) {
     res.status(400);
     throw new Error('Not enough carbon points to buy the coupon');
   }
 
-  // Deduct the points from the user's account
   user.carbonPoints -= coupon.pointsRequired;
 
-  // Add the coupon to the user's purchased coupons list
   user.coupons.push(coupon);
 
-  // Save the updated user data
   await user.save();
 
   res.json({ message: 'Coupon purchased successfully' });

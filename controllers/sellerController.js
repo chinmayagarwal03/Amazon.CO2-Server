@@ -5,8 +5,8 @@ import Seller from '../models/sellerModel.js';
 
 
 // @desc    Create a new seller
-// @route   POST /api/sellers
-// @access  Private/Admin (Modify the access level as needed)
+// @route   POST /api/seller
+// @access  Private
 const createSeller = asyncHandler(async (req, res) => {
     const { name, email, carbonRating , about, rating} = req.body;
 
@@ -23,6 +23,9 @@ const createSeller = asyncHandler(async (req, res) => {
 });
 
 
+// @desc    Get all sellers
+// @route   GET /api/seller
+// @access  PUBLIC
 const getAllSellers = asyncHandler(async (req, res) => {
     const sellers = await Seller.find({});
     const sellerId = sellers.map(seller => seller.sellerId);

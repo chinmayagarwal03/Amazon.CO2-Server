@@ -4,7 +4,6 @@ import Order from '../models/orderModel.js'
 // @desc    Create new order
 // @route   POST /api/orders
 // @access  Private
-
 const addOrderItems = asyncHandler(async (req, res) => {
   const {
     orderItems,
@@ -61,7 +60,7 @@ const getOrderById = asyncHandler(async (req, res) => {
 
 
 
-  // @desc    Update order to paid
+// @desc    Update order to paid
 // @route   PUT /api/orders/:id/pay
 // @access  Private
 const updateOrderToPaid = asyncHandler(async (req, res) => {
@@ -74,10 +73,8 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
         id: req.body.id,
         status: req.body.status,
         update_time: req.body.update_time,
-        // email_address: req.body.payer.email_address,
       };
   
-      // Calculating total points from order items
       let totalPoints = 0;
       for (let i = 0; i < order.orderItems.length; i++) {
         const product = order.orderItems[i];
@@ -86,9 +83,8 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
         }
       }
   
-      // Checking if the order is for return box delivery
       if (order.deliveryType === 'returnBox') {
-        totalPoints += 1; // Increase by 1 point for return box delivery
+        totalPoints += 2; 
       }
   
       if (totalPoints > 0) {
@@ -105,6 +101,10 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
     }
 });
 
+
+// @desc    Update order to paid
+// @route   patch /api/orders/:id/deliver
+// @access  Private
 const updateOrderToDelivered = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id)
 

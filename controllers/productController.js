@@ -3,34 +3,36 @@ import Coupon from '../models/couponModel.js';
 import Product from '../models/productModel.js'
 import User from '../models/userModel.js';
 import Seller from '../models/sellerModel.js'
+
 // @desc    Fetch all products
 // @route   GET /api/products
 // @acess   Public
 const getProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find({}).populate('sellers.sellerId').exec(); // Fetch all products
+  const products = await Product.find({}).populate('sellers.sellerId').exec(); 
 
   if (products) {
-    res.json(products); // Return all products
+    res.json(products); 
   } else {
     res.status(404).json({ message: 'No products found' });
   }
 });
 
+// @desc    Fetch all products by ObjectId
+// @route   GET /api/product/:id
+// @acess   Public  
+const getProductById = asyncHandler(async (req, res) => {
+  const product = await Product.findById(req.params.id).populate('sellers.sellerId').exec();
   
-  const getProductById = asyncHandler(async (req, res) => {
-    const product = await Product.findById(req.params.id).populate('sellers.sellerId').exec();
+  if (!product) {
+    res.status(404);
+    throw new Error('Product not found');
+  }
   
-    if (!product) {
-      res.status(404);
-      throw new Error('Product not found');
-    }
-  
-    res.json(product);
-  });
+  res.json(product);
+});
  
-  
 // @desc    Delete a product
-// @route   DELETE /api/products/:id
+// @route   DELETE /api/product/:id
 // @acess   Private/Admin
 const deleteProduct = asyncHandler(async (req,res) => {
     const product = await Product.findById(req.params.id)
@@ -46,7 +48,7 @@ const deleteProduct = asyncHandler(async (req,res) => {
 })
 
 // @desc    Create a product
-// @route   POST /api/products
+// @route   POST /api/product
 // @acess   Private/Admin
 const createProduct = asyncHandler(async (req,res) => {
     const { productId, name, image, category, countInStock, numReviews, description, sellers } = req.body;
@@ -56,8 +58,7 @@ const createProduct = asyncHandler(async (req,res) => {
         image: image,
         category: category,
         description: description ,
-        sellers: sellers || [], // Assuming sellers array is provided in the request body
-        // user: req.user._id,
+        sellers: sellers || [], 
         countInStock: countInStock || 0,
         numReviews: numReviews || 0,
        
@@ -67,7 +68,9 @@ const createProduct = asyncHandler(async (req,res) => {
     res.status(201).json(createdProduct)
 })
 
-
+// @desc    Update the details about product
+// @route   PATCH /api/product
+// @acess   Private/Admin
 const updateProduct = asyncHandler(async (req,res) => {
     const {name, price, description, image, brand, category, countInStock} = req.body
 
@@ -92,7 +95,9 @@ const updateProduct = asyncHandler(async (req,res) => {
 })
 
 
-
+// @desc    Create the Review about product
+// @route   POST /api/product/:id/reviews
+// @acess   Public
 const createProductReview = asyncHandler(async (req,res) => {
     const {
         rating,
@@ -131,7 +136,9 @@ const createProductReview = asyncHandler(async (req,res) => {
 })
 
 
-
+// @desc    Get the information about sellers of products
+// @route   POST /api/product/:id/sellers
+// @acess   Public
 const getProductSellers = asyncHandler(async (req, res) => {
   const { id } = req.params; 
 
@@ -166,7 +173,9 @@ const getProductSellers = asyncHandler(async (req, res) => {
 });
   
   
-  
+ // @desc   Get top products on the basis of reviews
+// @route   POST /api/product/top
+// @acess   Public 
 const getTopProducts = asyncHandler(async (req,res) => {
    const products = await Product.find({}).sort({reviews: -1}).limit(3);
    res.json(products)
