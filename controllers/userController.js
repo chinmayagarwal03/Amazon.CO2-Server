@@ -16,6 +16,9 @@ const authUser = asyncHandler(async (req,res) => {
             name: user.email,
             email: user.email,
             isAdmin: user.isAdmin,
+            carbonPoints: user.carbonPoints,
+            carbon_credits: user.carbon_credits,
+            coupons: user.coupons,
             token: generateToken(user._id)
         })
     }else{
