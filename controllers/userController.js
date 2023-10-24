@@ -71,7 +71,11 @@ const getUserProfile = asyncHandler(async (req,res) => {
             _id: user._id,
             name: user.email,
             email: user.email,
+            carbonPoints: user.carbonPoints,
+            carbon_credits: user.carbon_credits,
+            coupons: user.coupons,
             isAdmin: user.isAdmin,
+
         })
     }else{
         res.status(404)
@@ -129,7 +133,7 @@ const getUserById = asyncHandler(async (req,res) => {
 
 const updateUser = asyncHandler(async (req, res) => {
     const { id } = req.params;
-    const { carbonPoints, coupons } = req.body;
+    const { carbonPoints, coupons, carbon_credits } = req.body;
   
     const user = await User.findById(id);
   
@@ -140,6 +144,12 @@ const updateUser = asyncHandler(async (req, res) => {
       if (coupons) {
         user.coupons.push(coupons);
       }
+
+      if(carbon_credits)
+      {
+        user.carbon_credits = carbon_credits;
+      }
+
   
       const updatedUser = await user.save();
   

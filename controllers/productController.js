@@ -7,7 +7,7 @@ import Seller from '../models/sellerModel.js'
 // @route   GET /api/products
 // @acess   Public
 const getProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find({}); // Fetch all products
+  const products = await Product.find({}).populate('sellers.sellerId').exec(); // Fetch all products
 
   if (products) {
     res.json(products); // Return all products

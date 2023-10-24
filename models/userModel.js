@@ -25,12 +25,17 @@ const userSchema = mongoose.Schema(
         type: Number,
         default: 0,
     },
+    carbon_credits: {
+      type: Number,
+      default: 0,
+    },
     coupons: [
         {
           type: mongoose.Schema.Types.ObjectId,
           ref: 'Coupon',
         },
-      ],  
+      ], 
+
   },
   {
     timestamps: true,
